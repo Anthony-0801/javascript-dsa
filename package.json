@@ -1,0 +1,13 @@
+{
+  "name": "javascript-dsa",
+  "version": "1.0.0",
+  "description": "A simple repo containing my learnings in DSA",
+  "license": "ISC",
+  "author": "Anthony AC",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node index.js"
+  }
+}
