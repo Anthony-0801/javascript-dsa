@@ -33,15 +33,10 @@
  * @return {number}
  */
 export function findMaximum(arr) {
-  // Linear scan - O(n) time, O(1) space
-  if (!Array.isArray(arr)) throw new Error('Input must be an array');
-  if (arr.length === 0) throw new Error('Array must contain at least one element');
-
-  let max = arr[0];
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] > max) max = arr[i];
-  }
-  return max;
+  // TODO: Implementation required
+  // Remember: You must iterate through the array once O(n)
+  // Track the maximum value using a single variable
+  throw new Error('Not implemented');
 }
 
 // ============================================================================
