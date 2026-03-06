@@ -154,8 +154,8 @@ Is your solution fast enough?
 
 **Example:**
 ```javascript
-// This will pass:
-function findMaximum(arr) {
+// Good (linear scan - O(n))
+function maxLinear(arr) {
   let max = arr[0];
   for (let i = 1; i < arr.length; i++) {
     if (arr[i] > max) max = arr[i];
@@ -163,9 +163,9 @@ function findMaximum(arr) {
   return max;  // O(n) ✓
 }
 
-// This might work but will FAIL:
-function findMaximum(arr) {
-  return arr.sort((a, b) => b - a)[0];  // O(n log n) ❌
+// Bad (sort-based - O(n log n))
+function maxUsingSort(arr) {
+  return arr.slice().sort((a, b) => b - a)[0];  // O(n log n) ❌
 }
 ```
 
@@ -175,7 +175,7 @@ Are you using the right approach efficiently?
 **Example:**
 ```javascript
 // ✓ PASS: Two-pointer, O(n) time, O(1) space
-function removeElement(arr, target) {
+function removeTwoPointer(arr, target) {
   let k = 0;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] !== target) {
@@ -186,7 +186,7 @@ function removeElement(arr, target) {
 }
 
 // ❌ FAIL: splice() in loop is O(n²) time!
-function removeElement(arr, target) {
+function removeSpliceNaive(arr, target) {
   for (let i = arr.length - 1; i >= 0; i--) {
     if (arr[i] === target) {
       arr.splice(i, 1);  // This is O(n) for each element!
@@ -230,6 +230,25 @@ npm run test
 # Run array tests specifically
 npm run test:array
 ```
+
+### Run a single array challenge
+
+You can run a single array challenge using the dedicated npm scripts added to the project. Replace `X` with the challenge number (1-6):
+
+```bash
+# Run all array tests
+npm run test:array
+
+# Run a specific array challenge by number
+npm run test:array-1   # Challenge 01 - Find Maximum
+npm run test:array-2   # Challenge 02 - Count Occurrences
+npm run test:array-3   # Challenge 03 - Remove Element
+npm run test:array-4   # Challenge 04 - Merge Sorted Arrays
+npm run test:array-5   # Challenge 05 - Rotate Array
+npm run test:array-6   # Challenge 06 - Two Sum
+```
+
+These scripts import and run a small exported helper from `tests/array.test.js` (for example `runFindMaxTests`) so you can test a single challenge without editing or creating files.
 
 ## 📖 Documentation Files
 
@@ -284,7 +303,7 @@ When a test fails:
 // "Time: O(n), Space: O(1)"
 
 // Step 2: Try naive approach
-export function removeElement(arr, target) {
+export function removeSpliceNaive(arr, target) {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] === target) {
       arr.splice(i, 1);  // ← This is inefficient!
@@ -303,7 +322,7 @@ export function removeElement(arr, target) {
 // Read: docs/reference-links.md -> Two Pointer Technique
 
 // Step 5: Implement correct solution
-export function removeElement(arr, target) {
+export function removeTwoPointer(arr, target) {
   let k = 0;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] !== target) {
@@ -325,12 +344,12 @@ export function removeElement(arr, target) {
 ### ❌ Mistake 1: Using sort() for searching
 ```javascript
 // Bad - O(n log n)
-function findMaximum(arr) {
-  return arr.sort()[arr.length - 1];
+function maxUsingSort(arr) {
+  return arr.slice().sort()[arr.length - 1];
 }
 
 // Good - O(n)
-function findMaximum(arr) {
+function maxLinear(arr) {
   let max = arr[0];
   for (let i = 1; i < arr.length; i++) {
     if (arr[i] > max) max = arr[i];

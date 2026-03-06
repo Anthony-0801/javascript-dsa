@@ -117,6 +117,93 @@ function isModifiedInPlace(original, modified) {
   return original === modified;
 }
 
+/**
+ * Create a Proxy around an array to count element accesses and sets.
+ * This helps tests enforce stricter Big-O by measuring actual element
+ * accesses rather than relying solely on time thresholds.
+ */
+function createAccessCountingArray(arr, options = {}) {
+  const forbidden = new Set(options.forbiddenMethods || []);
+  const counter = { gets: 0, sets: 0, lengthReads: 0, methodCalls: 0 };
+  const handler = {
+    get(target, prop, receiver) {
+      if (prop === 'length') {
+        counter.lengthReads++;
+        return Reflect.get(target, prop, receiver);
+      }
+
+      // numeric index access
+      if (typeof prop === 'string' && /^\d+$/.test(prop)) {
+        counter.gets++;
+        return Reflect.get(target, prop, receiver);
+      }
+
+      const value = Reflect.get(target, prop, receiver);
+      // If method is forbidden, return a function that throws to force
+      // test failure and to discourage forbidden built-in usage.
+      if (typeof value === 'function') {
+        if (forbidden.has(prop)) {
+          return function () {
+            throw new Error(`Forbidden array method used: ${String(prop)}`);
+          };
+        }
+        // allowed method - bind to the underlying target
+        return function (...args) {
+          counter.methodCalls++;
+          return value.apply(target, args);
+        };
+      }
+      return value;
+    },
+    set(target, prop, value, receiver) {
+      if (typeof prop === 'string' && /^\d+$/.test(prop)) counter.sets++;
+      return Reflect.set(target, prop, value, receiver);
+    }
+  };
+
+  return { proxy: new Proxy(arr, handler), counter };
+}
+
+/**
+ * Asymptotic checker: runs the provided function on arrays of increasing
+ * sizes and inspects element-access growth to infer complexity class.
+ * - makeInput(n) should return a fresh array for size n
+ * - callFn should call the tested function with the constructed proxy and any args
+ */
+function asymptoticCheck({ makeInput, callFn, expected = 'linear', ns = [2000, 4000, 8000], forbiddenMethods = [] }) {
+  const totals = [];
+
+  for (const n of ns) {
+    const raw = makeInput(n);
+    const { proxy, counter } = createAccessCountingArray(raw, { forbiddenMethods });
+    // Execute function under test
+    callFn(proxy);
+    const total = counter.gets + counter.sets + counter.lengthReads;
+    totals.push(total);
+  }
+
+  // Compute scaling ratios between successive sizes
+  const r1 = totals[1] / Math.max(1, totals[0]);
+  const r2 = totals[2] / Math.max(1, totals[1]);
+
+  if (expected === 'linear') {
+    // Doubling n should roughly double the work; allow tolerance
+    if (!(r1 > 1.2 && r1 < 3.2 && r2 > 1.2 && r2 < 3.2)) {
+      throw new Error(`❌ FAILED ASYMPTOTIC CHECK: expected ~O(n). Ratios: ${r1.toFixed(2)}, ${r2.toFixed(2)} (totals: ${totals.join(',')})`);
+    }
+  } else if (expected === 'nlogn') {
+    if (!(r1 > 1.8 && r1 < 5 && r2 > 1.8 && r2 < 5)) {
+      throw new Error(`❌ FAILED ASYMPTOTIC CHECK: expected ~O(n log n). Ratios: ${r1.toFixed(2)}, ${r2.toFixed(2)}`);
+    }
+  } else if (expected === 'quadratic') {
+    if (!(r1 > 3 && r2 > 3)) {
+      throw new Error(`❌ FAILED ASYMPTOTIC CHECK: expected ~O(n^2). Ratios: ${r1.toFixed(2)}, ${r2.toFixed(2)}`);
+    }
+  }
+
+  return true;
+}
+
 // ============================================================================
 // CHALLENGE 1: FIND MAXIMUM
 // ============================================================================
@@ -144,10 +231,16 @@ findMaxTest.test('All same elements', () => {
 });
 
 findMaxTest.test('Time Complexity - O(n)', () => {
-  const largeArr = Array.from({ length: 10000 }, (_, i) => i);
-  const { time } = measureTime(findMaximum, largeArr);
-  // O(n) should complete very quickly for 10k elements
-  assert(time < 100, `Should complete in under 100ms, took ${time.toFixed(2)}ms`);
+  const n = 20000;
+  const raw = Array.from({ length: n }, (_, i) => i);
+  const { proxy, counter } = createAccessCountingArray(raw);
+  const { time } = measureTime(findMaximum, proxy);
+  // Stricter checks: time and element access count
+  assert(time < 500, `Should complete in under 500ms, took ${time.toFixed(2)}ms`);
+  assert(
+    counter.gets <= n * 5,
+    `❌ FAILED COMPLEXITY CHECK! Expected ~O(n) element accesses (<= ${n * 5}), got ${counter.gets}`
+  );
 });
 
 findMaxTest.test('Space Complexity - O(1)', () => {
@@ -155,6 +248,16 @@ findMaxTest.test('Space Complexity - O(1)', () => {
   const arr = [1, 2, 3, 4, 5];
   const result = findMaximum(arr);
   assert(typeof result === 'number', 'Should return a single number, not an array');
+});
+
+findMaxTest.test('Asymptotic: element-access growth ~O(n)', () => {
+  asymptoticCheck({
+    makeInput: n => Array.from({ length: n }, (_, i) => i),
+    callFn: proxy => findMaximum(proxy),
+    forbiddenMethods: ['sort', 'reduce', 'slice'],
+    expected: 'linear',
+    ns: [2000, 4000, 8000]
+  });
 });
 
 // ============================================================================
@@ -184,14 +287,27 @@ countTest.test('Empty array', () => {
 });
 
 countTest.test('Time Complexity - O(n)', () => {
-  const largeArr = Array.from({ length: 100000 }, (_, i) => i % 10);
-  const { time } = measureTime(countOccurrences, largeArr, 5);
-  assert(time < 200, `Should complete in under 200ms for 100k elements, took ${time.toFixed(2)}ms`);
+  const n = 150000;
+  const raw = Array.from({ length: n }, (_, i) => i % 10);
+  const { proxy, counter } = createAccessCountingArray(raw);
+  const { time } = measureTime(countOccurrences, proxy, 5);
+  assert(time < 600, `Should complete in under 600ms for ${n} elements, took ${time.toFixed(2)}ms`);
+  assert(counter.gets <= n * 6, `❌ FAILED COMPLEXITY CHECK! Expected ~O(n) accesses, got ${counter.gets}`);
 });
 
 countTest.test('Space Complexity - O(1)', () => {
   const result = countOccurrences([1, 2, 2, 3], 2);
   assert(typeof result === 'number', 'Should return a number, not an array');
+});
+
+countTest.test('Asymptotic: element-access growth ~O(n)', () => {
+  asymptoticCheck({
+    makeInput: n => Array.from({ length: n }, (_, i) => i % 10),
+    callFn: proxy => countOccurrences(proxy, 5),
+    forbiddenMethods: ['filter','reduce','slice'],
+    expected: 'linear',
+    ns: [2000, 4000, 8000]
+  });
 });
 
 // ============================================================================
@@ -226,21 +342,20 @@ removeTest.test('No match', () => {
 });
 
 removeTest.test('Time Complexity - O(n) required', () => {
-  const arr = Array.from({ length: 100000 }, () => 1);
-  const { time } = measureTime(removeElement, arr, 1);
-  
-  // O(n) should be very fast - under 200ms
-  // O(n²) would be much slower - multiple seconds
+  const n = 120000;
+  const raw = Array.from({ length: n }, () => 1);
+  const { proxy, counter } = createAccessCountingArray(raw);
+  const { time } = measureTime(removeElement, proxy, 1);
+
   assert(
-    time < 200,
-    `❌ FAILED COMPLEXITY CHECK!\n` +
-    `  Took ${time.toFixed(2)}ms for 100k elements\n` +
-    `  This looks like O(n²) - using splice() in a loop?\n` +
-    `  💡 HINT: Use TWO-POINTER approach:\n` +
-    `     1. One pointer for write position\n` +
-    `     2. One pointer for read position\n` +
-    `     3. Copy non-target elements forward\n` +
-    `     This achieves O(n) time!`
+    time < 800,
+    `❌ FAILED COMPLEXITY CHECK!\n  Took ${time.toFixed(2)}ms for ${n} elements\n  This looks like O(n²) - using splice() in a loop?\n  💡 HINT: Use TWO-POINTER approach to achieve O(n) time!`
+  );
+
+  const totalAccesses = counter.gets + counter.sets + counter.lengthReads;
+  assert(
+    totalAccesses <= n * 12,
+    `❌ FAILED COMPLEXITY CHECK! Too many element operations (${totalAccesses}) for ${n} elements.`
   );
 });
 
@@ -255,6 +370,16 @@ removeTest.test('Space Complexity - O(1) in-place modification', () => {
     `  💡 HINT: Modify the input array directly\n` +
     `     Don't create new arrays with spread, concat, or filter`
   );
+});
+
+removeTest.test('Asymptotic: element-access growth ~O(n)', () => {
+  asymptoticCheck({
+    makeInput: n => Array.from({ length: n }, () => 1),
+    callFn: proxy => removeElement(proxy, 1),
+    forbiddenMethods: ['splice','filter'],
+    expected: 'linear',
+    ns: [2000, 4000, 8000]
+  });
 });
 
 // ============================================================================
@@ -284,22 +409,23 @@ mergeTest.test('Duplicates', () => {
 });
 
 mergeTest.test('Time Complexity - O(n + m) required', () => {
-  const arr1 = Array.from({ length: 50000 }, (_, i) => i * 2);
-  const arr2 = Array.from({ length: 50000 }, (_, i) => i * 2 + 1);
-  const { time } = measureTime(mergeSortedArrays, arr1, arr2);
+  const n = 60000;
+  const m = 60000;
+  const raw1 = Array.from({ length: n }, (_, i) => i * 2);
+  const raw2 = Array.from({ length: m }, (_, i) => i * 2 + 1);
+  const a1 = createAccessCountingArray(raw1);
+  const a2 = createAccessCountingArray(raw2);
+  const { time } = measureTime(mergeSortedArrays, a1.proxy, a2.proxy);
 
   assert(
-    time < 500,
-    `❌ FAILED COMPLEXITY CHECK!\n` +
-    `  Took ${time.toFixed(2)}ms for merging 100k elements\n` +
-    `  This looks like O((n+m)log(n+m)) - are you sorting?\n` +
-    `  💡 HINT: Use TWO-POINTER approach:\n` +
-    `     1. Start with pointers at beginning of each array\n` +
-    `     2. Compare elements and add smaller to result\n` +
-    `     3. Move that pointer forward\n` +
-    `     4. Repeat until one array exhausted\n` +
-    `     5. Add remaining elements\n` +
-    `     This achieves O(n+m) without sorting!`
+    time < 1000,
+    `❌ FAILED COMPLEXITY CHECK!\n  Took ${time.toFixed(2)}ms for merging ${n + m} elements\n  This looks like sorting-based approach. Use TWO-POINTER to achieve O(n+m).`
+  );
+
+  const totalGets = a1.counter.gets + a2.counter.gets;
+  assert(
+    totalGets <= (n + m) * 6,
+    `❌ FAILED COMPLEXITY CHECK! Too many element reads (${totalGets}) for ${n + m} elements.`
   );
 });
 
@@ -308,6 +434,16 @@ mergeTest.test('Result is sorted', () => {
   for (let i = 0; i < result.length - 1; i++) {
     assert(result[i] <= result[i + 1], `Result not properly sorted at index ${i}`);
   }
+});
+
+mergeTest.test('Asymptotic: element-access growth ~O(n+m)', () => {
+  asymptoticCheck({
+    makeInput: n => Array.from({ length: n }, (_, i) => i * 2),
+    callFn: proxy => mergeSortedArrays(proxy, proxy.slice().map(x => x + 1)),
+    forbiddenMethods: [],
+    expected: 'linear',
+    ns: [2000, 4000, 8000]
+  });
 });
 
 // ============================================================================
@@ -335,24 +471,18 @@ rotateTest.test('Zero rotation', () => {
 });
 
 rotateTest.test('Time Complexity - O(n) required', () => {
-  const arr = Array.from({ length: 100000 }, (_, i) => i);
-  const { time } = measureTime(rotateArray, arr, 50000);
+  const n = 120000;
+  const raw = Array.from({ length: n }, (_, i) => i);
+  const { proxy, counter } = createAccessCountingArray(raw);
+  const { time } = measureTime(rotateArray, proxy, 50000);
 
   assert(
-    time < 300,
-    `❌ FAILED COMPLEXITY CHECK!\n` +
-    `  Took ${time.toFixed(2)}ms for 100k elements\n` +
-    `  This looks like O(n*k) - using pop/unshift in loop?\n` +
-    `  💡 HINT: Use REVERSE approach (O(n)):\n` +
-    `     1. Normalize k: k = k % arr.length\n` +
-    `     2. Reverse entire array\n` +
-    `     3. Reverse first k elements\n` +
-    `     4. Reverse remaining (n-k) elements\n` +
-    `     Example: [1,2,3,4,5], k=2\n` +
-    `     → Reverse all: [5,4,3,2,1]\n` +
-    `     → Reverse first 2: [4,5,3,2,1]\n` +
-    `     → Reverse last 3: [4,5,1,2,3] ✓`
+    time < 1200,
+    `❌ FAILED COMPLEXITY CHECK!\n  Took ${time.toFixed(2)}ms for ${n} elements - avoid O(n*k) approaches.`
   );
+
+  const ops = counter.gets + counter.sets + counter.lengthReads;
+  assert(ops <= n * 8, `❌ FAILED COMPLEXITY CHECK! Too many operations (${ops}) for ${n} elements.`);
 });
 
 rotateTest.test('Space Complexity - O(1) in-place', () => {
@@ -368,6 +498,16 @@ rotateTest.test('Space Complexity - O(1) in-place', () => {
   );
 });
 
+rotateTest.test('Asymptotic: element-access growth ~O(n)', () => {
+  asymptoticCheck({
+    makeInput: n => Array.from({ length: n }, (_, i) => i),
+    callFn: proxy => rotateArray(proxy, Math.floor(proxy.length / 3)),
+    forbiddenMethods: ['unshift','shift'],
+    expected: 'linear',
+    ns: [2000, 4000, 8000]
+  });
+});
+
 // ============================================================================
 // CHALLENGE 6: TWO SUM
 // ============================================================================
@@ -375,11 +515,12 @@ rotateTest.test('Space Complexity - O(1) in-place', () => {
 const twoSumTest = new TestRunner('Challenge 6: Two Sum (Dynamic Arrays/Hash Maps)');
 
 twoSumTest.test('Basic case', () => {
-  const result = twoSum([2, 7, 11, 15], 9);
+  const arr = [2, 7, 11, 15];
+  const result = twoSum(arr, 9);
   const [a, b] = result;
   assert(
-    a !== b && [2, 7].includes(a) && [2, 7].includes(b),
-    `Expected indices of 2 and 7, got indices ${a} and ${b}`
+    typeof a === 'number' && typeof b === 'number' && a !== b && arr[a] + arr[b] === 9,
+    `Expected indices pointing to values 2 and 7, got indices ${a} and ${b}`
   );
 });
 
@@ -399,39 +540,40 @@ twoSumTest.test('Correct indices returned', () => {
 twoSumTest.test(
   'Time Complexity - O(n) with Hash Map REQUIRED',
   () => {
-    const largeArr = Array.from({ length: 100000 }, (_, idx) => idx * 2);
-    largeArr[99999] = 199998;
-    largeArr[50000] = 1000;
-    
-    const { time } = measureTime(twoSum, largeArr, 200998);
+    const n = 120000;
+    const raw = Array.from({ length: n }, (_, idx) => idx * 2);
+    raw[n - 1] = (n - 1) * 2;
+    raw[Math.floor(n / 2)] = 1000;
+    const { proxy, counter } = createAccessCountingArray(raw);
+
+    const { time } = measureTime(twoSum, proxy, (n - 1) * 2 + 1000);
 
     assert(
-      time < 500,
-      `❌ FAILED COMPLEXITY CHECK!\n` +
-      `  Took ${time.toFixed(2)}ms for 100k elements\n` +
-      `  This looks like O(n²) - are you using nested loops?\n` +
-      `  ⚠️  NESTED LOOPS ARE NOT ACCEPTED!\n\n` +
-      `  💡 REQUIRED APPROACH: Use Hash Map for O(n) time\n` +
-      `     1. Create a Map/Object to store: value -> index\n` +
-      `     2. For each element at index i:\n` +
-      `        a. Check if (target - element) exists in map\n` +
-      `        b. If YES → return [map.get(diff), i]\n` +
-      `        c. If NO → add element to map\n` +
-      `     3. Continue until found\n\n` +
-      `     Example with [2,7,11,15], target=9:\n` +
-      `     i=0: map={}, looking for 7, not found, map={2:0}\n` +
-      `     i=1: map={2:0}, looking for 2, FOUND at 0!\n` +
-      `     return [0, 1] ✓`
+      time < 1000,
+      `❌ FAILED COMPLEXITY CHECK!\n  Took ${time.toFixed(2)}ms for ${n} elements - nested loops (O(n²)) detected or too slow.`
     );
+
+    assert(counter.gets <= n * 6, `❌ FAILED COMPLEXITY CHECK! Too many element reads (${counter.gets}) for ${n} elements.`);
   }
 );
 
 twoSumTest.test('Space Complexity awareness - Using Hash Map', () => {
   // This test just verifies the solution can handle the data
   const arr = Array.from({ length: 10000 }, (_, i) => i);
-  const result = twoSum(arr, 19998);
+  // target chosen so a valid pair exists (9998 + 9999 = 19997)
+  const result = twoSum(arr, 19997);
   const [i, j] = result;
-  assert(arr[i] + arr[j] === 19998, 'Solution should work with large arrays');
+  assert(arr[i] + arr[j] === 19997, 'Solution should work with large arrays');
+});
+
+twoSumTest.test('Asymptotic: element-access growth ~O(n)', () => {
+  asymptoticCheck({
+    makeInput: n => Array.from({ length: n }, (_, i) => i * 2),
+    callFn: proxy => twoSum(proxy, proxy.length >= 2 ? proxy[proxy.length - 1] + proxy[0] : 0),
+    forbiddenMethods: ['filter','reduce'],
+    expected: 'linear',
+    ns: [2000, 4000, 8000]
+  });
 });
 
 // ============================================================================
@@ -455,4 +597,55 @@ export function runAllTests() {
   console.log(`${'='.repeat(70)}`);
 
   return allPassed;
+}
+
+// ---------------------------------------------------------------------------
+// Per-challenge runners (Option B) - export small helpers to run a single
+// challenge's tests. These are intentionally tiny wrappers so CLI tools can
+// import and run a single test-suite without creating new files.
+// ---------------------------------------------------------------------------
+
+export function runFindMaxTests() {
+  return findMaxTest.run();
+}
+
+export function runCountTests() {
+  return countTest.run();
+}
+
+export function runRemoveElementTests() {
+  return removeTest.run();
+}
+
+export function runMergeSortedArraysTests() {
+  return mergeTest.run();
+}
+
+export function runRotateArrayTests() {
+  return rotateTest.run();
+}
+
+export function runTwoSumTests() {
+  return twoSumTest.run();
+}
+
+// Convenience: run by numeric id (1..6)
+export function runArrayTestByNumber(n) {
+  switch (Number(n)) {
+    case 1:
+      return runFindMaxTests();
+    case 2:
+      return runCountTests();
+    case 3:
+      return runRemoveElementTests();
+    case 4:
+      return runMergeSortedArraysTests();
+    case 5:
+      return runRotateArrayTests();
+    case 6:
+      return runTwoSumTests();
+    default:
+      console.log('Unknown array test id:', n);
+      return false;
+  }
 }

@@ -126,7 +126,25 @@ console.log(`
  * - Provide hints if tests fail
  */
 
-runArrayTests();  // Currently testing arrays
+// runArrayTests();  // Currently testing arrays
+
+// ---------------------------------------------------------------------------
+// NEW: Per-challenge test helpers
+// You can run a single array challenge from npm using the scripts added to
+// package.json (example: `npm run test:array-1` runs challenge 01-find-maximum).
+// The package.json scripts import small exported helpers from
+// `tests/array.test.js` (e.g. `runFindMaxTests`). This avoids creating new
+// files and keeps single-test execution lightweight.
+// ---------------------------------------------------------------------------
+
+// Examples (from the shell):
+//  npm run test:array       # run all array tests
+//  npm run test:array-1     # run challenge 01 - find maximum
+//  npm run test:array-2     # run challenge 02 - count occurrences
+//  npm run test:array-3     # run challenge 03 - remove element
+//  npm run test:array-4     # run challenge 04 - merge sorted arrays
+//  npm run test:array-5     # run challenge 05 - rotate array
+//  npm run test:array-6     # run challenge 06 - two-sum
 
 // ============================================================================
 // CHALLENGE SELECTION (Uncomment to run specific challenge tests)
