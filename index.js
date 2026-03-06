@@ -27,7 +27,7 @@
 // IMPORT TEST SUITES - Uncomment to run tests for specific data structures
 // ============================================================================
 
-import { runAllTests as runArrayTests } from './tests/array.test.js';
+// import { runAllTests as runArrayTests } from './tests/array.test.js';
 // import { runAllTests as runHashTableTests } from './tests/hash-table.test.js';  // Coming soon
 // import { runAllTests as runLinkedListTests } from './tests/linked-list.test.js';  // Coming soon
 
@@ -68,32 +68,32 @@ console.log(`
 
 console.log(`
 ┌─ HOW TO USE THIS ENVIRONMENT ─────────────────────────────────────────────┐
-│                                                                            │
-│  WORKFLOW:                                                                 │
-│  ─────────                                                                 │
+│                                                                           │
+│  WORKFLOW:                                                                │
+│  ─────────                                                                │
 │  1. Open a challenge file in challenges/[structure]-challenges/           │
 │  2. Implement the solution function (replacing the "throw" statement)     │
 │  3. Import the function at top of this file (uncomment import)            │
 │  4. Run test command: npm start                                           │
 │  5. Read test results carefully - they include hints!                     │
 │  6. Fix your solution and repeat                                          │
-│                                                                            │
-│  IMPORTANT NOTES:                                                          │
-│  ────────────────                                                          │
+│                                                                           │
+│  IMPORTANT NOTES:                                                         │
+│  ────────────────                                                         │
 │  ✓ Tests check time complexity - O(n²) solutions will FAIL               │
 │  ✓ Tests check space complexity - Extra arrays will cause FAIL           │
 │  ✓ Must implement exactly as specified in challenge files                │
 │  ✓ Focus on algorithm efficiency, not just correctness                   │
-│                                                                            │
-│  INCLUDED FEATURES:                                                        │
-│  ──────────────────                                                        │
+│                                                                           │
+│  INCLUDED FEATURES:                                                       │
+│  ──────────────────                                                       │
 │  • Comprehensive test suite for each challenge                            │
 │  • Big O complexity validation                                            │
 │  • Helpful clues when tests fail                                          │
 │  • Performance timing analysis                                            │
 │  • Input/output verification                                              │
-│                                                                            │
-└────────────────────────────────────────────────────────────────────────────┘
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
 `);
 
 // ============================================================================
@@ -150,41 +150,41 @@ runArrayTests();  // Currently testing arrays
 
 console.log(`
 ┌─ CURRENT FOCUS: ARRAYS ───────────────────────────────────────────────────┐
-│                                                                            │
+│                                                                           │
 │  ARRAYS - 6 Challenges (4-8 hours total)                                  │
 │  ────────────────────────────────────────────────────────────────         │
 │  1. Find Maximum           (01-find-maximum.js)                           │
 │     • Easy - Linear scan and comparison                                   │
 │     • Time: O(n), Space: O(1)                                             │
-│                                                                            │
+│                                                                           │
 │  2. Count Occurrences      (02-count-occurrences.js)                      │
 │     • Easy - Counting pattern                                             │
 │     • Time: O(n), Space: O(1)                                             │
-│                                                                            │
+│                                                                           │
 │  3. Remove Element         (03-remove-element.js)                         │
 │     • Medium - Two-pointer technique (★ Important!)                       │
 │     • Time: O(n), Space: O(1)                                             │
-│                                                                            │
+│                                                                           │
 │  4. Merge Sorted Arrays    (04-merge-sorted-arrays.js)                    │
 │     • Medium - Merge operation (foundation of Merge Sort)                 │
 │     • Time: O(n+m), Space: O(n+m)                                         │
-│                                                                            │
+│                                                                           │
 │  5. Rotate Array           (05-rotate-array.js)                           │
 │     • Medium - In-place rotation with reversal                            │
 │     • Time: O(n), Space: O(1)                                             │
-│                                                                            │
+│                                                                           │
 │  6. Two Sum                (06-two-sum.js)                                │
-│     • Medium - Hash map approach (★★ Critical for interviews!)            │
+│     • Medium - Hash map approach (★★ Critical for interviews!)           │
 │     • Time: O(n), Space: O(n)                                             │
-│                                                                            │
+│                                                                           │
 │  See docs/array-reference-links.md for detailed information               │
-│                                                                            │
+│                                                                           │
 │  NEXT DATA STRUCTURES (Coming Soon):                                      │
 │  • Hash Tables - O(1) lookups and insertions                              │
 │  • Linked Lists - O(1) middle operations                                  │
 │  • Stacks & Queues - LIFO and FIFO structures                             │
-│                                                                            │
-└────────────────────────────────────────────────────────────────────────────┘
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
 `);
 
 // ============================================================================
@@ -200,7 +200,7 @@ console.log(`
 │    - Does your solution produce the right output?                         │
 │    - Are edge cases handled?                                              │
 │                                                                            │
-│  ✓ TIME COMPLEXITY                                                         │
+│  ✓ TIME COMPLEXITY                                                        │
 │    - Is your solution fast enough?                                        │
 │    - Tests with large inputs to catch O(n²) vs O(n)                       │
 │    - Provides hints if you're too slow                                    │
