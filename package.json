@@ -9,6 +9,12 @@
   "scripts": {
     "start": "node index.js",
     "test": "node tests/array.test.js",
-    "test:array": "node -e \"import { runAllTests } from './tests/array.test.js'; runAllTests();\""
+    "test:array": "node -e \"import { runAllTests } from './tests/array.test.js'; runAllTests();\"",
+    "test:array-1": "node -e \"import { runFindMaxTests } from './tests/array.test.js'; runFindMaxTests();\"",
+    "test:array-2": "node -e \"import { runCountTests } from './tests/array.test.js'; runCountTests();\"",
+    "test:array-3": "node -e \"import { runRemoveElementTests } from './tests/array.test.js'; runRemoveElementTests();\"",
+    "test:array-4": "node -e \"import { runMergeSortedArraysTests } from './tests/array.test.js'; runMergeSortedArraysTests();\"",
+    "test:array-5": "node -e \"import { runRotateArrayTests } from './tests/array.test.js'; runRotateArrayTests();\"",
+    "test:array-6": "node -e \"import { runTwoSumTests } from './tests/array.test.js'; runTwoSumTests();\""
   }
 }
