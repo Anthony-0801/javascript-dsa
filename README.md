@@ -83,6 +83,10 @@ javascript-dsa/
 | 4 | Merge Sorted Arrays | Medium | Two-Pointer Merge | O(n+m) | O(n+m) |
 | 5 | Rotate Array | Medium | In-Place, Reverse | O(n) | O(1) |
 | 6 | Two Sum | Medium | Hash Map | O(n) | O(n) |
+| 7 | Longest Subarray Sum K | Medium | Prefix Sum + Hash Map | O(n) | O(n) |
+| 8 | Product Except Self | Medium-Hard | Two-pass products | O(n) | O(1) extra |
+| 9 | Maximum Subarray | Medium | Kadane's Algorithm | O(n) | O(1) |
+|10 | Longest Increasing Subsequence | Hard | Patience Sorting / Binary Search | O(n log n) | O(n) |
 
 **Important:** Tests will reject solutions that don't meet the required Big O complexity!
 
@@ -246,6 +250,10 @@ npm run test:array-3   # Challenge 03 - Remove Element
 npm run test:array-4   # Challenge 04 - Merge Sorted Arrays
 npm run test:array-5   # Challenge 05 - Rotate Array
 npm run test:array-6   # Challenge 06 - Two Sum
+npm run test:array-7   # Challenge 07 - Longest Subarray Sum K
+npm run test:array-8   # Challenge 08 - Product Except Self
+npm run test:array-9   # Challenge 09 - Maximum Subarray
+npm run test:array-10  # Challenge 10 - Longest Increasing Subsequence
 ```
 
 These scripts import and run a small exported helper from `tests/array.test.js` (for example `runFindMaxTests`) so you can test a single challenge without editing or creating files.

@@ -14,6 +14,10 @@ import { removeElement } from '../challenges/array-challenges/03-remove-element.
 import { mergeSortedArrays } from '../challenges/array-challenges/04-merge-sorted-arrays.js';
 import { rotateArray } from '../challenges/array-challenges/05-rotate-array.js';
 import { twoSum } from '../challenges/array-challenges/06-two-sum.js';
+import { longestSubarraySumK } from '../challenges/array-challenges/07-longest-subarray-sum-k.js';
+import { productExceptSelf } from '../challenges/array-challenges/08-product-except-self.js';
+import { maxSubarray } from '../challenges/array-challenges/09-maximum-subarray.js';
+import { lengthOfLIS } from '../challenges/array-challenges/10-longest-increasing-subsequence.js';
 
 // ============================================================================
 // TEST FRAMEWORK
@@ -577,6 +581,76 @@ twoSumTest.test('Asymptotic: element-access growth ~O(n)', () => {
 });
 
 // ============================================================================
+// CHALLENGE 7: LONGEST SUBARRAY WITH SUM K
+// ============================================================================
+
+const longestSumTest = new TestRunner('Challenge 7: Longest Subarray Sum K');
+
+longestSumTest.test('Basic cases', () => {
+  deepEqual(longestSubarraySumK([1, -1, 5, -2, 3], 3), 4);
+  deepEqual(longestSubarraySumK([-2, -1, 2, 1], 1), 2);
+});
+
+longestSumTest.test('Time & Asymptotic - O(n)', () => {
+  const n = 30000;
+  const raw = Array.from({ length: n }, (_, i) => (i % 5) - 2);
+  const { proxy, counter } = createAccessCountingArray(raw);
+  const { time } = measureTime(longestSubarraySumK, proxy, 3);
+  assert(time < 1200, `Should be linear-ish; took ${time.toFixed(2)}ms`);
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => (i % 5) - 2), callFn: p => longestSubarraySumK(p, 3), expected: 'linear' });
+});
+
+// ============================================================================
+// CHALLENGE 8: PRODUCT EXCEPT SELF
+// ============================================================================
+
+const productTest = new TestRunner('Challenge 8: Product Except Self');
+
+productTest.test('Basic cases', () => {
+  deepEqual(productExceptSelf([1, 2, 3, 4]), [24, 12, 8, 6]);
+  deepEqual(productExceptSelf([0, 0]), [0, 0]);
+});
+
+productTest.test('Time Complexity - O(n)', () => {
+  const n = 60000;
+  const raw = Array.from({ length: n }, (_, i) => (i % 10) + 1);
+  const { proxy, counter } = createAccessCountingArray(raw, { forbiddenMethods: ['reduce','slice'] });
+  const { time } = measureTime(productExceptSelf, proxy);
+  assert(time < 1000, `Should be linear; took ${time.toFixed(2)}ms`);
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => (i % 10) + 1), callFn: p => productExceptSelf(p), expected: 'linear', forbiddenMethods: ['reduce','slice'] });
+});
+
+// ============================================================================
+// CHALLENGE 9: MAXIMUM SUBARRAY (KADANE)
+// ============================================================================
+
+const maxSubTest = new TestRunner('Challenge 9: Maximum Subarray');
+
+maxSubTest.test('Basic cases', () => {
+  deepEqual(maxSubarray([-2,1,-3,4,-1,2,1,-5,4]), 6); // [4,-1,2,1]
+  deepEqual(maxSubarray([1]), 1);
+});
+
+maxSubTest.test('Time Complexity - O(n)', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => (i % 7) - 3), callFn: p => maxSubarray(p), expected: 'linear' });
+});
+
+// ============================================================================
+// CHALLENGE 10: LONGEST INCREASING SUBSEQUENCE (LIS)
+// ============================================================================
+
+const lisTest = new TestRunner('Challenge 10: Longest Increasing Subsequence');
+
+lisTest.test('Basic cases', () => {
+  deepEqual(lengthOfLIS([10,9,2,5,3,7,101,18]), 4);
+  deepEqual(lengthOfLIS([0,1,0,3,2,3]), 4);
+});
+
+lisTest.test('Asymptotic - expect O(n log n)', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => i % 100), callFn: p => lengthOfLIS(p), expected: 'nlogn' });
+});
+
+// ============================================================================
 // RUN ALL TESTS
 // ============================================================================
 
@@ -588,6 +662,10 @@ export function runAllTests() {
     mergeTest.run(),
     rotateTest.run(),
     twoSumTest.run(),
+    longestSumTest.run(),
+    productTest.run(),
+    maxSubTest.run(),
+    lisTest.run(),
   ];
 
   const allPassed = results.every(r => r === true);
@@ -629,6 +707,22 @@ export function runTwoSumTests() {
   return twoSumTest.run();
 }
 
+export function runLongestSumTests() {
+  return longestSumTest.run();
+}
+
+export function runProductExceptSelfTests() {
+  return productTest.run();
+}
+
+export function runMaxSubarrayTests() {
+  return maxSubTest.run();
+}
+
+export function runListTests() {
+  return lisTest.run();
+}
+
 // Convenience: run by numeric id (1..6)
 export function runArrayTestByNumber(n) {
   switch (Number(n)) {
@@ -644,6 +738,14 @@ export function runArrayTestByNumber(n) {
       return runRotateArrayTests();
     case 6:
       return runTwoSumTests();
+    case 7:
+      return runLongestSumTests();
+    case 8:
+      return runProductExceptSelfTests();
+    case 9:
+      return runMaxSubarrayTests();
+    case 10:
+      return runListTests();
     default:
       console.log('Unknown array test id:', n);
       return false;
