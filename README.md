@@ -15,7 +15,7 @@ This repository is designed to help you learn DSA through:
 
 ```bash
 # 1. Implement your first challenge
-# Open: challenges/array-challenges/01-find-maximum.js
+# Open: challenges/(some-DSA)-challenges/0X-challenge-name.js
 # Replace the "throw new Error" line with your solution
 
 # 2. Run the tests
@@ -45,12 +45,8 @@ javascript-dsa/
 │
 ├── challenges/                       # Problem-solving challenges
 │   └── array-challenges/
-│       ├── 01-find-maximum.js        # Easy: Find max value
-│       ├── 02-count-occurrences.js   # Easy: Count occurrences
-│       ├── 03-remove-element.js      # Medium: Two-pointer technique
-│       ├── 04-merge-sorted-arrays.js # Medium: Merge operation
-│       ├── 05-rotate-array.js        # Medium: In-place rotation
-│       └── 06-two-sum.js             # Medium: Hash map approach
+│       ├── 0X-challenge-name.js        # Level: Description
+│   
 │
 ├── tests/                            # Automated test suites
 │   └── array.test.js                 # Tests for all array challenges
@@ -73,24 +69,9 @@ javascript-dsa/
 
 **Key Insight:** Arrays are efficient for end operations but terrible for middle operations. This is why linked lists exist!
 
-### challenges/array-challenges/
-
-| # | Challenge | Difficulty | Concepts | Time | Space |
-|---|-----------|-----------|----------|------|-------|
-| 1 | Find Maximum | Easy | Iteration | O(n) | O(1) |
-| 2 | Count Occurrences | Easy | Counter Pattern | O(n) | O(1) |
-| 3 | Remove Element | Medium | Two-Pointer | O(n) | O(1) |
-| 4 | Merge Sorted Arrays | Medium | Two-Pointer Merge | O(n+m) | O(n+m) |
-| 5 | Rotate Array | Medium | In-Place, Reverse | O(n) | O(1) |
-| 6 | Two Sum | Medium | Hash Map | O(n) | O(n) |
-| 7 | Longest Subarray Sum K | Medium | Prefix Sum + Hash Map | O(n) | O(n) |
-| 8 | Product Except Self | Medium-Hard | Two-pass products | O(n) | O(1) extra |
-| 9 | Maximum Subarray | Medium | Kadane's Algorithm | O(n) | O(1) |
-|10 | Longest Increasing Subsequence | Hard | Patience Sorting / Binary Search | O(n log n) | O(n) |
-
 **Important:** Tests will reject solutions that don't meet the required Big O complexity!
 
-### tests/array.test.js
+### tests/
 **What Gets Tested:**
 - ✓ Correctness - Does it produce the right answer?
 - ✓ Time Complexity - Is it fast enough?
@@ -108,7 +89,7 @@ javascript-dsa/
 ### Step 1: Understand the Concepts
 ```bash
 # Read the documentation
-1. Open: src/data-structures/arrays.js
+1. Open: src/data-structures/
 2. Read through all the concepts and examples
 3. Understand the Big O analysis for each operation
 ```
@@ -199,29 +180,6 @@ function removeSpliceNaive(arr, target) {
 }
 ```
 
-## 🎓 Learning Path Recommendations
-
-### For Beginners
-1. Challenge 1: Find Maximum
-2. Challenge 2: Count Occurrences
-3. Read about Big O complexity
-4. Challenge 3: Remove Element (learn two-pointer)
-
-### For Intermediate
-1. Challenge 3: Remove Element
-2. Challenge 4: Merge Sorted Arrays
-3. Challenge 5: Rotate Array
-4. Review algorithm variations
-
-### For Interview Prep
-1. Challenge 6: Two Sum (★★★ Most important!)
-2. Understand hash map approach deeply
-3. Practice similar problems (3Sum, TwoSum variants)
-4. Time yourself solving these problems
-
-### Complete Learning
-Do all challenges in order 1-6, ensuring each passes all tests.
-
 ## 🧪 Commands
 
 ```bash
@@ -235,15 +193,15 @@ npm run test
 npm run test:array
 ```
 
-### Run a single array challenge
+### Run a single data structures and algorithm challenge
 
-You can run a single array challenge using the dedicated npm scripts added to the project. Replace `X` with the challenge number (1-6):
+You can run a single challenge by using the dedicated npm scripts added to the project. Replace `X` with the challenge number (1-10):
 
 ```bash
-# Run all array tests
+# Example: Run all array tests
 npm run test:array
 
-# Run a specific array challenge by number
+# Example: Run a specific array challenge by number
 npm run test:array-1   # Challenge 01 - Find Maximum
 npm run test:array-2   # Challenge 02 - Count Occurrences
 npm run test:array-3   # Challenge 03 - Remove Element
@@ -256,7 +214,7 @@ npm run test:array-9   # Challenge 09 - Maximum Subarray
 npm run test:array-10  # Challenge 10 - Longest Increasing Subsequence
 ```
 
-These scripts import and run a small exported helper from `tests/array.test.js` (for example `runFindMaxTests`) so you can test a single challenge without editing or creating files.
+These scripts import and run a small exported helper from `tests/(data-structure or algorithm).test.js` (for example `runFindMaxTests`) so you can test a single challenge without editing or creating files.
 
 ## 📖 Documentation Files
 
@@ -397,20 +355,7 @@ for (let i = 0; i < arr.length; i++) {
   }
   map.set(arr[i], i);
 }
-```
 
-## 📊 Progress Tracking
-
-Track your progress:
-
-```
-Challenge 1: Find Maximum         [ ] Not Started  [ ] In Progress  [x] Complete ✓
-Challenge 2: Count Occurrences    [ ] Not Started  [ ] In Progress  [ ] Complete
-Challenge 3: Remove Element       [ ] Not Started  [ ] In Progress  [ ] Complete
-Challenge 4: Merge Sorted Arrays  [ ] Not Started  [ ] In Progress  [ ] Complete
-Challenge 5: Rotate Array         [ ] Not Started  [ ] In Progress  [ ] Complete
-Challenge 6: Two Sum              [ ] Not Started  [ ] In Progress  [ ] Complete
-```
 
 ## 🚀 Future Enhancements
 
@@ -458,18 +403,6 @@ Want to add more data structures?
 - William Fiset - Algorithm tutorials
 - FreeCodeCamp - Full courses
 
-## 🎓 Learning Outcomes
-
-After completing all challenges, you will understand:
-
-- ✓ Array operations and their complexities
-- ✓ Two-pointer technique (critical for interviews!)
-- ✓ Hash map usage for optimization
-- ✓ In-place array modifications
-- ✓ Big O analysis and optimization
-- ✓ How to approach algorithm problems
-- ✓ How to recognize algorithm patterns
-- ✓ Interview problem-solving strategies
 
 ## 📝 License
 
@@ -485,4 +418,4 @@ Anthony AC
 
 Remember: The goal is not just to solve problems, but to understand the algorithms and trade-offs behind them. Take your time, read the hints, and master each concept before moving on.
 
-**Last Updated:** March 6, 2026
+**Last Updated:** March 7, 2026

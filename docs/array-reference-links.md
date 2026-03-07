@@ -226,6 +226,73 @@ Step 3: Reverse last n-k → [4,5,1,2,3] ✓
 
 ---
 
+### Challenge 7: Longest Subarray Sum K
+**File:** `challenges/array-challenges/07-longest-subarray-sum-k.js`
+
+- **Concept:** Prefix-sum + hash map to find longest contiguous subarray summing to K
+- **Difficulty:** Medium
+- **Big O:** Time O(n), Space O(n)
+
+**Key Insight:** Use running prefix sums and store earliest indices in a map to find width quickly.
+
+**Similar Problems:**
+- LeetCode #325: Maximum Size Subarray Sum Equals k
+
+**Resources:**
+- [Prefix Sum + Hash Map - LeetCode Discuss](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+
+---
+
+### Challenge 8: Product Except Self
+**File:** `challenges/array-challenges/08-product-except-self.js`
+
+- **Concept:** Two-pass accumulation without using division
+- **Difficulty:** Medium
+- **Big O:** Time O(n), Space O(1) extra (excluding output)
+
+**Key Insight:** Compute prefix products then suffix products (or accumulate on the fly) to avoid extra arrays.
+
+**Similar Problems:**
+- LeetCode #238: Product of Array Except Self
+
+**Resources:**
+- [Product Except Self - LeetCode Explanation](https://leetcode.com/problems/product-of-array-except-self/)
+
+---
+
+### Challenge 9: Maximum Subarray
+**File:** `challenges/array-challenges/09-maximum-subarray.js`
+
+- **Concept:** Kadane's algorithm for best contiguous subarray sum
+- **Difficulty:** Medium
+- **Big O:** Time O(n), Space O(1)
+
+**Key Insight:** Track current best suffix sum and global maximum; reset when suffix becomes negative.
+
+**Similar Problems:**
+- LeetCode #53: Maximum Subarray
+
+**Resources:**
+- [Kadane's Algorithm - GeeksforGeeks](https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/)
+
+---
+
+### Challenge 10: Longest Increasing Subsequence (LIS)
+**File:** `challenges/array-challenges/10-longest-increasing-subsequence.js`
+
+- **Concept:** Patience sorting / dynamic programming with binary search
+- **Difficulty:** Hard
+- **Big O:** Time O(n log n), Space O(n)
+
+**Key Insight:** Maintain a tails array where tails[i] is the smallest possible tail value for an increasing subsequence of length i+1; use binary search to update.
+
+**Similar Problems:**
+- LeetCode #300: Longest Increasing Subsequence
+
+**Resources:**
+- [LIS (Patience Sorting) - LeetCode Discuss](https://leetcode.com/problems/longest-increasing-subsequence/)
+
+
 ## Learning Paths
 
 ### Path 1: Absolute Beginner

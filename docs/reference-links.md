@@ -1,7 +1,7 @@
 # Reference Links & Learning Resources
 
 > **Repository:** JavaScript DSA Learning  
-> **Last Updated:** March 6, 2026  
+> **Last Updated:** March 7, 2026  
 > **Purpose:** Comprehensive DSA learning with emphasis on practical implementation and Big O compliance
 
 This document contains general learning resources and links to topic-specific reference guides.
@@ -159,7 +159,7 @@ For detailed information about each data structure and its challenges, see:
 ### Progressive Difficulty Path
 
 **Week 1-2: Foundations**
-- Arrays (all 6 challenges)
+- Arrays (all 10 challenges)
 - Big O analysis basics
 - Two-pointer technique
 - Hash maps
@@ -395,7 +395,6 @@ assert(condition,
 
 ---
 
-**Last Updated:** March 6, 2026  
 **Repository:** JavaScript-DSA Learning  
 **Maintainer:** Anthony AC  
 
