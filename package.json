@@ -8,7 +8,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node tests/array.test.js",
     "test:array": "node -e \"import { runAllTests } from './tests/array.test.js'; runAllTests();\"",
     "test:array-1": "node -e \"import { runFindMaxTests } from './tests/array.test.js'; runFindMaxTests();\"",
     "test:array-2": "node -e \"import { runCountTests } from './tests/array.test.js'; runCountTests();\"",
@@ -16,5 +15,9 @@
     "test:array-4": "node -e \"import { runMergeSortedArraysTests } from './tests/array.test.js'; runMergeSortedArraysTests();\"",
     "test:array-5": "node -e \"import { runRotateArrayTests } from './tests/array.test.js'; runRotateArrayTests();\"",
     "test:array-6": "node -e \"import { runTwoSumTests } from './tests/array.test.js'; runTwoSumTests();\""
+    ,"test:array-7": "node -e \"import { runLongestSumTests } from './tests/array.test.js'; runLongestSumTests();\"",
+    "test:array-8": "node -e \"import { runProductExceptSelfTests } from './tests/array.test.js'; runProductExceptSelfTests();\"",
+    "test:array-9": "node -e \"import { runMaxSubarrayTests } from './tests/array.test.js'; runMaxSubarrayTests();\"",
+    "test:array-10": "node -e \"import { runListTests } from './tests/array.test.js'; runListTests();\""
   }
 }
