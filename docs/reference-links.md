@@ -1,7 +1,7 @@
 # Reference Links & Learning Resources
 
 > **Repository:** JavaScript DSA Learning  
-> **Last Updated:** March 7, 2026  
+> **Last Updated:** March 9, 2026  
 > **Purpose:** Comprehensive DSA learning with emphasis on practical implementation and Big O compliance
 
 This document contains general learning resources and links to topic-specific reference guides.
@@ -14,7 +14,7 @@ For detailed information about each data structure and its challenges, see:
 
 - **[Arrays](./array-reference-links.md)** - Array operations, challenges, and resources
 - **Hash Tables** _(coming soon)_ - Hash map implementation and problems
-- **Linked Lists** _(coming soon)_ - Singly/doubly linked lists
+- **[Linked Lists](./linked-list-reference-links.md)** - Singly/doubly linked lists
 - **Stacks & Queues** _(coming soon)_ - LIFO and FIFO structures
 - **Trees** _(coming soon)_ - Binary trees, BST, traversals
 - **Graphs** _(coming soon)_ - Graph algorithms and traversals
