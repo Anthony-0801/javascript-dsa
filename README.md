@@ -46,14 +46,18 @@ javascript-dsa/
 ├── challenges/                       # Problem-solving challenges
 │   └── array-challenges/
 │       ├── 0X-challenge-name.js        # Level: Description
+│   └── linked-list-challenges/
+│       ├── 0X-remove-nth-node.js       # Level: Description
 │   
 │
 ├── tests/                            # Automated test suites
-│   └── array.test.js                 # Tests for all array challenges
+│   ├── array.test.js                 # Tests for all array challenges
+│   └── linked-list.test.js           # Tests for linked-list challenges
 │
 └── docs/                             # Documentation & references
-    ├── reference-links.md            # General DSA resources & links
-    └── array-reference-links.md      # Array-specific references
+    ├── reference-links.md              # General DSA resources & links
+    └── array-reference-links.md        # Array-specific references
+    └── linked-list-reference-links.md  # Linked-list specific references
 ```
 
 ## 📚 Content Breakdown

@@ -14,7 +14,7 @@ For detailed information about each data structure and its challenges, see:
 
 - **[Arrays](./array-reference-links.md)** - Array operations, challenges, and resources
 - **Hash Tables** _(coming soon)_ - Hash map implementation and problems
-- **Linked Lists** _(coming soon)_ - Singly/doubly linked lists
+- **[Linked Lists](./linked-list-reference-links.md)** - Singly/doubly linked lists
 - **Stacks & Queues** _(coming soon)_ - LIFO and FIFO structures
 - **Trees** _(coming soon)_ - Binary trees, BST, traversals
 - **Graphs** _(coming soon)_ - Graph algorithms and traversals
