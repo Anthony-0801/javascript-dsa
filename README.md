@@ -64,31 +64,24 @@ javascript-dsa/
 
 ## 📚 Content Breakdown
 
-### src/data-structures/arrays.js
-**What You'll Learn:**
-- ✓ What is an array and how it works
-- ✓ Read and update operations (O(1))
-- ✓ Iteration techniques (forward, backward, forEach)
-- ✓ Search methods (linear O(n), binary O(log n))
-- ✓ Array end operations (push/pop - O(1))
-- ✓ Array middle operations (insert/remove - O(n))
+This repository groups learning material, exercises, and tests by topic. Below are the three primary data-structure guides included now — each contains a compact concept file in `src/data-structures/`, a set of challenges in `challenges/*-challenges/`, and a corresponding test suite in `tests/`.
 
-**Key Insight:** Arrays are efficient for end operations but terrible for middle operations. This is why linked lists exist!
+- Arrays — `src/data-structures/arrays.js`
+  - Core ideas: indexed access, push/pop, iteration, search (linear/binary).
+  - Typical costs: O(1) access, O(n) inserts/removes in middle, O(1) push/pop amortized.
+  - Challenges focus on two-pointer, sliding-window, prefix/suffix, and sorting-adjacent patterns.
 
-**Important:** Tests will reject solutions that don't meet the required Big O complexity!
+- Linked Lists — `src/data-structures/linked-list.js`
+  - Core ideas: nodes with `next` (and optional `prev`), head/tail pointers.
+  - Typical costs: O(1) insert/remove at head (or tail with tail pointer), O(n) access by index.
+  - Challenges focus on pointer manipulation: removal, reversal, cycle detection, merging.
 
-### tests/
-**What Gets Tested:**
-- ✓ Correctness - Does it produce the right answer?
-- ✓ Time Complexity - Is it fast enough?
-- ✓ Space Complexity - Does it use extra memory?
-- ✓ Algorithm Conformance - Is the right approach used?
+- Queues — `src/data-structures/queue.js`
+  - Core ideas: FIFO behavior; implementations: array-with-head, linked-list, circular buffer.
+  - Typical costs: O(1) enqueue/dequeue when implemented correctly (avoid repeated `shift`).
+  - Challenges focus on simulations, sliding windows, and implementation variants (e.g., queue via stacks, ring buffer).
 
-**Special Features:**
-- Performance timing to catch O(n²) algorithms
-- Operation counting to verify complexity
-- Detailed error messages with hints
-- Large input tests (10k-100k+ elements)
+Each topic includes tests that validate correctness and check asymptotic behavior; read problem hints before implementing solutions.
 
 ## 🚀 How to Use This Repository
 
