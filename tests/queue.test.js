@@ -110,7 +110,7 @@ const recentCounterTest = new TestRunner('Challenge 6: Recent Counter');
 
 recentCounterTest.test('Count in window', () => {
   const times = [100, 200, 300, 800];
-  deepEqual(recentCounter(times, 500), 3); // last=800 -> window [300,800]
+  deepEqual(recentCounter(times, 500), 2); // last=800 -> window [300,800]
 });
 
 const stacksQueueTest = new TestRunner('Challenge 7: Queue Using Stacks');
@@ -133,7 +133,7 @@ genBinaryTest.test('Generate first 5 binaries', () => {
 const movingAvgTest = new TestRunner('Challenge 9: Moving Average from Data Stream');
 
 movingAvgTest.test('Basic moving averages', () => {
-  deepEqual(movingAverage([1,3,2,6], 3).map(x => Number(x.toFixed(5))), [1,2,2, (1+3+2+6 - 1) / 3 || (11/3).toFixed(5)].map(Number));
+  deepEqual(movingAverage([1,3,2,6], 3).map(x => Number(x.toFixed(5))), [1,2,2,3.66667]);
 });
 
 const circularTest = new TestRunner('Challenge 10: Circular Queue');
