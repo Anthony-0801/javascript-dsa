@@ -216,12 +216,25 @@ t10.test('palindrome false', () => {
   assert(!isPalindrome(head), 'should not be palindrome');
 });
 
-// Run all tests
-const suites = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10];
-let allPassed = true;
-for (const s of suites) {
-  const ok = s.run();
-  if (!ok) allPassed = false;
-}
+// Exported runners: allow running individual linked-list challenge suites
+export function runLinkedListTest1() { return t1.run(); }
+export function runLinkedListTest2() { return t2.run(); }
+export function runLinkedListTest3() { return t3.run(); }
+export function runLinkedListTest4() { return t4.run(); }
+export function runLinkedListTest5() { return t5.run(); }
+export function runLinkedListTest6() { return t6.run(); }
+export function runLinkedListTest7() { return t7.run(); }
+export function runLinkedListTest8() { return t8.run(); }
+export function runLinkedListTest9() { return t9.run(); }
+export function runLinkedListTest10() { return t10.run(); }
 
-if (!allPassed) process.exitCode = 1;
+export function runAllLinkedListTests() {
+  const suites = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10];
+  let allPassed = true;
+  for (const s of suites) {
+    const ok = s.run();
+    if (!ok) allPassed = false;
+  }
+  if (!allPassed) process.exitCode = 1;
+  return allPassed;
+}

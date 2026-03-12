@@ -8,16 +8,42 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+
     "test:array": "node -e \"import { runAllTests } from './tests/array.test.js'; runAllTests();\"",
+    "test:linked-list": "node -e \"import { runAllLinkedListTests } from './tests/linked-list.test.js'; runAllLinkedListTests();\"",
+    "test:queue": "node -e \"import { runAllQueueTests } from './tests/queue.test.js'; runAllQueueTests();\"",
+
     "test:array-1": "node -e \"import { runFindMaxTests } from './tests/array.test.js'; runFindMaxTests();\"",
     "test:array-2": "node -e \"import { runCountTests } from './tests/array.test.js'; runCountTests();\"",
     "test:array-3": "node -e \"import { runRemoveElementTests } from './tests/array.test.js'; runRemoveElementTests();\"",
     "test:array-4": "node -e \"import { runMergeSortedArraysTests } from './tests/array.test.js'; runMergeSortedArraysTests();\"",
     "test:array-5": "node -e \"import { runRotateArrayTests } from './tests/array.test.js'; runRotateArrayTests();\"",
-    "test:array-6": "node -e \"import { runTwoSumTests } from './tests/array.test.js'; runTwoSumTests();\""
-    ,"test:array-7": "node -e \"import { runLongestSumTests } from './tests/array.test.js'; runLongestSumTests();\"",
+    "test:array-6": "node -e \"import { runTwoSumTests } from './tests/array.test.js'; runTwoSumTests();\"",
+    "test:array-7": "node -e \"import { runLongestSumTests } from './tests/array.test.js'; runLongestSumTests();\"",
     "test:array-8": "node -e \"import { runProductExceptSelfTests } from './tests/array.test.js'; runProductExceptSelfTests();\"",
     "test:array-9": "node -e \"import { runMaxSubarrayTests } from './tests/array.test.js'; runMaxSubarrayTests();\"",
-    "test:array-10": "node -e \"import { runListTests } from './tests/array.test.js'; runListTests();\""
+    "test:array-10": "node -e \"import { runListTests } from './tests/array.test.js'; runListTests();\"",
+
+    "test:linked-list-1": "node -e \"import { runLinkedListTest1 } from './tests/linked-list.test.js'; runLinkedListTest1();\"",
+    "test:linked-list-2": "node -e \"import { runLinkedListTest2 } from './tests/linked-list.test.js'; runLinkedListTest2();\"",
+    "test:linked-list-3": "node -e \"import { runLinkedListTest3 } from './tests/linked-list.test.js'; runLinkedListTest3();\"",
+    "test:linked-list-4": "node -e \"import { runLinkedListTest4 } from './tests/linked-list.test.js'; runLinkedListTest4();\"",
+    "test:linked-list-5": "node -e \"import { runLinkedListTest5 } from './tests/linked-list.test.js'; runLinkedListTest5();\"",
+    "test:linked-list-6": "node -e \"import { runLinkedListTest6 } from './tests/linked-list.test.js'; runLinkedListTest6();\"",
+    "test:linked-list-7": "node -e \"import { runLinkedListTest7 } from './tests/linked-list.test.js'; runLinkedListTest7();\"",
+    "test:linked-list-8": "node -e \"import { runLinkedListTest8 } from './tests/linked-list.test.js'; runLinkedListTest8();\"",
+    "test:linked-list-9": "node -e \"import { runLinkedListTest9 } from './tests/linked-list.test.js'; runLinkedListTest9();\"",
+    "test:linked-list-10": "node -e \"import { runLinkedListTest10 } from './tests/linked-list.test.js'; runLinkedListTest10();\"",
+
+    "test:queue-1": "node -e \"import { runQueueTest1 } from './tests/queue.test.js'; runQueueTest1();\"",
+    "test:queue-2": "node -e \"import { runQueueTest2 } from './tests/queue.test.js'; runQueueTest2();\"",
+    "test:queue-3": "node -e \"import { runQueueTest3 } from './tests/queue.test.js'; runQueueTest3();\"",
+    "test:queue-4": "node -e \"import { runQueueTest4 } from './tests/queue.test.js'; runQueueTest4();\"",
+    "test:queue-5": "node -e \"import { runQueueTest5 } from './tests/queue.test.js'; runQueueTest5();\"",
+    "test:queue-6": "node -e \"import { runQueueTest6 } from './tests/queue.test.js'; runQueueTest6();\"",
+    "test:queue-7": "node -e \"import { runQueueTest7 } from './tests/queue.test.js'; runQueueTest7();\"",
+    "test:queue-8": "node -e \"import { runQueueTest8 } from './tests/queue.test.js'; runQueueTest8();\"",
+    "test:queue-9": "node -e \"import { runQueueTest9 } from './tests/queue.test.js'; runQueueTest9();\"",
+    "test:queue-10": "node -e \"import { runQueueTest10 } from './tests/queue.test.js'; runQueueTest10();\""
   }
 }

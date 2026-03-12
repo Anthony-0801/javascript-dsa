@@ -39,7 +39,7 @@ javascript-dsa/
 │       ├── arrays.js                 # Array concepts & operations
 │       ├── hash-table.js             # (Placeholder for future)
 │       ├── linked-list.js            # (Placeholder for future)
-│       ├── queue.js                  # (Placeholder for future)
+│       ├── queue.js                  # Queue concepts & operations
 │       ├── stack.js                  # (Placeholder for future)
 │       └── tree.js                   # (Placeholder for future)
 │
@@ -47,7 +47,9 @@ javascript-dsa/
 │   └── array-challenges/
 │       ├── 0X-challenge-name.js        # Level: Description
 │   └── linked-list-challenges/
-│       ├── 0X-remove-nth-node.js       # Level: Description
+│       ├── 0X-challenge-name.js       # Level: Description
+│   └── queue-challenges/
+│       ├── 0X-challenge-name.js       # Level: Description
 │   
 │
 ├── tests/                            # Automated test suites

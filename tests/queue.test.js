@@ -175,3 +175,31 @@ export function runAllQueueTests() {
   console.log(`${'='.repeat(70)}`);
   return allPassed;
 }
+
+// Per-challenge runners (1..10)
+export function runQueueTest1() { return printQueueTest.run(); }
+export function runQueueTest2() { return ticketTest.run(); }
+export function runQueueTest3() { return josephusTest.run(); }
+export function runQueueTest4() { return reverseTest.run(); }
+export function runQueueTest5() { return hotPotatoTest.run(); }
+export function runQueueTest6() { return recentCounterTest.run(); }
+export function runQueueTest7() { return stacksQueueTest.run(); }
+export function runQueueTest8() { return genBinaryTest.run(); }
+export function runQueueTest9() { return movingAvgTest.run(); }
+export function runQueueTest10() { return circularTest.run(); }
+
+export function runQueueTestByNumber(n) {
+  switch(Number(n)) {
+    case 1: return runQueueTest1();
+    case 2: return runQueueTest2();
+    case 3: return runQueueTest3();
+    case 4: return runQueueTest4();
+    case 5: return runQueueTest5();
+    case 6: return runQueueTest6();
+    case 7: return runQueueTest7();
+    case 8: return runQueueTest8();
+    case 9: return runQueueTest9();
+    case 10: return runQueueTest10();
+    default: console.log('Unknown queue test id:', n); return false;
+  }
+}
