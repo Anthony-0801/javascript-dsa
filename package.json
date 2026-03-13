@@ -12,6 +12,8 @@
     "test:array": "node -e \"import { runAllTests } from './tests/array.test.js'; runAllTests();\"",
     "test:linked-list": "node -e \"import { runAllLinkedListTests } from './tests/linked-list.test.js'; runAllLinkedListTests();\"",
     "test:queue": "node -e \"import { runAllQueueTests } from './tests/queue.test.js'; runAllQueueTests();\"",
+    "test:hash-table": "node -e \"import { runAllHashTableTests } from './tests/hash-table.test.js'; runAllHashTableTests();\"",
+
 
     "test:array-1": "node -e \"import { runFindMaxTests } from './tests/array.test.js'; runFindMaxTests();\"",
     "test:array-2": "node -e \"import { runCountTests } from './tests/array.test.js'; runCountTests();\"",
@@ -44,6 +46,17 @@
     "test:queue-7": "node -e \"import { runQueueTest7 } from './tests/queue.test.js'; runQueueTest7();\"",
     "test:queue-8": "node -e \"import { runQueueTest8 } from './tests/queue.test.js'; runQueueTest8();\"",
     "test:queue-9": "node -e \"import { runQueueTest9 } from './tests/queue.test.js'; runQueueTest9();\"",
-    "test:queue-10": "node -e \"import { runQueueTest10 } from './tests/queue.test.js'; runQueueTest10();\""
+    "test:queue-10": "node -e \"import { runQueueTest10 } from './tests/queue.test.js'; runQueueTest10();\"",
+
+    "test:hash-table-1": "node -e \"import { runHashTableTest1 } from './tests/hash-table.test.js'; runHashTableTest1();\"",
+    "test:hash-table-2": "node -e \"import { runHashTableTest2 } from './tests/hash-table.test.js'; runHashTableTest2();\"",
+    "test:hash-table-3": "node -e \"import { runHashTableTest3 } from './tests/hash-table.test.js'; runHashTableTest3();\"",
+    "test:hash-table-4": "node -e \"import { runHashTableTest4 } from './tests/hash-table.test.js'; runHashTableTest4();\"",
+    "test:hash-table-5": "node -e \"import { runHashTableTest5 } from './tests/hash-table.test.js'; runHashTableTest5();\"",
+    "test:hash-table-6": "node -e \"import { runHashTableTest6 } from './tests/hash-table.test.js'; runHashTableTest6();\"",
+    "test:hash-table-7": "node -e \"import { runHashTableTest7 } from './tests/hash-table.test.js'; runHashTableTest7();\"",
+    "test:hash-table-8": "node -e \"import { runHashTableTest8 } from './tests/hash-table.test.js'; runHashTableTest8();\"",
+    "test:hash-table-9": "node -e \"import { runHashTableTest9 } from './tests/hash-table.test.js'; runHashTableTest9();\"",
+    "test:hash-table-10": "node -e \"import { runHashTableTest10 } from './tests/hash-table.test.js'; runHashTableTest10();\""
   }
 }

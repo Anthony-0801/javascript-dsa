@@ -65,6 +65,53 @@ function deepEqual(actual, expected) {
   }
 }
 
+// Simple performance helpers for queue tests
+function measureTime(fn, input, ...args) {
+  const start = performance.now();
+  const res = fn(input, ...args);
+  const end = performance.now();
+  return { result: res, time: end - start };
+}
+
+function createAccessCountingArray(arr, options = {}) {
+  const forbidden = new Set(options.forbiddenMethods || []);
+  const counter = { gets: 0, sets: 0, lengthReads: 0, methodCalls: 0 };
+  const handler = {
+    get(target, prop, receiver) {
+      if (prop === 'length') { counter.lengthReads++; return Reflect.get(target, prop, receiver); }
+      if (typeof prop === 'string' && /^\d+$/.test(prop)) { counter.gets++; return Reflect.get(target, prop, receiver); }
+      const value = Reflect.get(target, prop, receiver);
+      if (typeof value === 'function') {
+        if (forbidden.has(prop)) return function () { throw new Error(`Forbidden array method used: ${String(prop)}`); };
+        return function (...args) { counter.methodCalls++; return value.apply(target, args); };
+      }
+      return value;
+    },
+    set(target, prop, value, receiver) { if (typeof prop === 'string' && /^\d+$/.test(prop)) counter.sets++; return Reflect.set(target, prop, value, receiver); }
+  };
+  return { proxy: new Proxy(arr, handler), counter };
+}
+
+function asymptoticCheck({ makeInput, callFn, expected = 'linear', ns = [2000, 4000, 8000], forbiddenMethods = [] }) {
+  const totals = [];
+  for (const n of ns) {
+    const raw = makeInput(n);
+    const { proxy, counter } = createAccessCountingArray(raw, { forbiddenMethods });
+    callFn(proxy);
+    const total = counter.gets + counter.sets + counter.lengthReads;
+    totals.push(total);
+  }
+  const r1 = totals[1] / Math.max(1, totals[0]);
+  const r2 = totals[2] / Math.max(1, totals[1]);
+  if (expected === 'linear') {
+    if (!(r1 > 1.2 && r1 < 3.2 && r2 > 1.2 && r2 < 3.2)) {
+      throw new Error(`❌ FAILED ASYMPTOTIC CHECK: expected ~O(n). Ratios: ${r1.toFixed(2)}, ${r2.toFixed(2)}`);
+    }
+  }
+  return true;
+}
+
+
 // ============================================================================
 // Tests
 // ============================================================================
@@ -81,11 +128,19 @@ printQueueTest.test('Ties by order preserved', () => {
   deepEqual(res, 2);
 });
 
+printQueueTest.test('Asymptotic: simulatePrintQueue ~O(n log n) worst-case', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, () => 1), callFn: proxy => simulatePrintQueue(proxy, Math.floor(proxy.length/2)), expected: 'nlogn' });
+});
+
 const ticketTest = new TestRunner('Challenge 2: Time Needed to Buy Tickets');
 
 ticketTest.test('Basic example', () => {
   const t = timeNeededToBuyTickets([2,3,2], 2);
   deepEqual(t, 6);
+});
+
+ticketTest.test('Asymptotic: timeNeededToBuyTickets ~O(n)', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => i % 5 + 1), callFn: proxy => timeNeededToBuyTickets(proxy, Math.floor(proxy.length/2)), expected: 'linear' });
 });
 
 const josephusTest = new TestRunner('Challenge 3: Josephus Problem');
@@ -94,10 +149,26 @@ josephusTest.test('Small example', () => {
   deepEqual(josephus(7, 3), 3);
 });
 
+josephusTest.test('Asymptotic: josephus reasonable performance', () => {
+  const ns = [2000, 4000, 8000];
+  const times = ns.map(n => {
+    const start = performance.now();
+    josephus(n, 3);
+    return performance.now() - start;
+  });
+  const r1 = times[1] / Math.max(1, times[0]);
+  const r2 = times[2] / Math.max(1, times[1]);
+  if (!(r1 > 1.0 && r2 > 1.0)) throw new Error('josephus performance unexpected');
+});
+
 const reverseTest = new TestRunner('Challenge 4: Reverse First K Elements');
 
 reverseTest.test('Reverse first 3 of 5', () => {
   deepEqual(reverseFirstK([1,2,3,4,5], 3), [3,2,1,4,5]);
+});
+
+reverseTest.test('Asymptotic: reverseFirstK ~O(n)', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => i), callFn: proxy => reverseFirstK(proxy, Math.floor(proxy.length/3)), expected: 'linear' });
 });
 
 const hotPotatoTest = new TestRunner('Challenge 5: Hot Potato');
@@ -106,11 +177,19 @@ hotPotatoTest.test('Basic winner', () => {
   deepEqual(hotPotato(['A','B','C','D'], 3), 'A');
 });
 
+hotPotatoTest.test('Asymptotic: hotPotato ~O(n*k) bounded', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => String(i)), callFn: proxy => hotPotato(proxy, 5), expected: 'linear' });
+});
+
 const recentCounterTest = new TestRunner('Challenge 6: Recent Counter');
 
 recentCounterTest.test('Count in window', () => {
   const times = [100, 200, 300, 800];
   deepEqual(recentCounter(times, 500), 2); // last=800 -> window [300,800]
+});
+
+recentCounterTest.test('Asymptotic: recentCounter ~O(n)', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => i), callFn: proxy => recentCounter(proxy, 100), expected: 'linear' });
 });
 
 const stacksQueueTest = new TestRunner('Challenge 7: Queue Using Stacks');
@@ -124,16 +203,44 @@ stacksQueueTest.test('Enqueue and dequeue order', () => {
   deepEqual(q.peek(), 2);
 });
 
+stacksQueueTest.test('Asymptotic: queueUsingStacks operations amortized ~O(1)', () => {
+  const q = createQueueUsingStacks();
+  const n = 50000;
+  const start = performance.now();
+  for (let i=0;i<n;i++) q.enqueue(i);
+  for (let i=0;i<n;i++) q.dequeue();
+  const end = performance.now();
+  assert(end - start < 2000, `queueUsingStacks should be amortized O(1) per op; took ${(end - start).toFixed(2)}ms`);
+});
+
 const genBinaryTest = new TestRunner('Challenge 8: Generate Binary Numbers');
 
 genBinaryTest.test('Generate first 5 binaries', () => {
   deepEqual(generateBinaryNumbers(5), ['1','10','11','100','101']);
 });
 
+genBinaryTest.test('Asymptotic: generateBinaryNumbers ~O(n)', () => {
+  const ns = [2000, 4000, 8000];
+  const times = ns.map(n => {
+    const start = performance.now();
+    generateBinaryNumbers(n);
+    return performance.now() - start;
+  });
+  const r1 = times[1] / Math.max(1, times[0]);
+  const r2 = times[2] / Math.max(1, times[1]);
+  if (!(r1 > 1.2 && r1 < 3.2 && r2 > 1.2 && r2 < 3.2)) {
+    throw new Error(`❌ FAILED ASYMPTOTIC CHECK (generateBinaryNumbers): ratios ${r1.toFixed(2)}, ${r2.toFixed(2)}`);
+  }
+});
+
 const movingAvgTest = new TestRunner('Challenge 9: Moving Average from Data Stream');
 
 movingAvgTest.test('Basic moving averages', () => {
   deepEqual(movingAverage([1,3,2,6], 3).map(x => Number(x.toFixed(5))), [1,2,2,3.66667]);
+});
+
+movingAvgTest.test('Asymptotic: movingAverage ~O(n)', () => {
+  asymptoticCheck({ makeInput: n => Array.from({ length: n }, (_, i) => i), callFn: proxy => movingAverage(proxy, Math.max(1, Math.floor(proxy.length/10))), expected: 'linear' });
 });
 
 const circularTest = new TestRunner('Challenge 10: Circular Queue');
@@ -148,6 +255,16 @@ circularTest.test('Basic circular queue operations', () => {
   deepEqual(q.dequeue(), 1);
   q.enqueue(4);
   deepEqual(q.peek(), 2);
+});
+
+circularTest.test('Performance: circular queue enqueue/dequeue should be fast', () => {
+  const n = 200000;
+  const q = createCircularQueue(n);
+  const start = performance.now();
+  for (let i = 0; i < n; i++) q.enqueue(i);
+  for (let i = 0; i < n; i++) q.dequeue();
+  const end = performance.now();
+  assert(end - start < 2000, `Queue operations should be fast; took ${ (end - start).toFixed(2)}ms`);
 });
 
 // ============================================================================
