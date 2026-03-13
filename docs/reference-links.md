@@ -13,7 +13,7 @@ This document contains general learning resources and links to topic-specific re
 For detailed information about each data structure and its challenges, see:
 
 - **[Arrays](./array-reference-links.md)** - Array operations, challenges, and resources
-- **Hash Tables** _(coming soon)_ - Hash map implementation and problems
+- **[Hash Tables](./hash-table-reference-links.md)** - Hash map implementation and problems
 - **[Linked Lists](./linked-list-reference-links.md)** - Singly/doubly linked lists
  - **[Queues](./queue-reference-links.md)** - Queue operations, challenges, and resources
  - **Stacks** _(coming soon)_ - LIFO structures

@@ -37,8 +37,8 @@ javascript-dsa/
 ├── src/                              # Learning material & implementations
 │   └── data-structures/
 │       ├── arrays.js                 # Array concepts & operations
-│       ├── hash-table.js             # (Placeholder for future)
-│       ├── linked-list.js            # (Placeholder for future)
+│       ├── hash-table.js             # Hash table concepts & operations
+│       ├── linked-list.js            # Linked list concepts & operations
 │       ├── queue.js                  # Queue concepts & operations
 │       ├── stack.js                  # (Placeholder for future)
 │       └── tree.js                   # (Placeholder for future)
@@ -49,6 +49,8 @@ javascript-dsa/
 │   └── linked-list-challenges/
 │       ├── 0X-challenge-name.js       # Level: Description
 │   └── queue-challenges/
+│       ├── 0X-challenge-name.js       # Level: Description
+|   └── hash-table-challenges/
 │       ├── 0X-challenge-name.js       # Level: Description
 │   
 │
@@ -82,6 +84,11 @@ This repository groups learning material, exercises, and tests by topic. Below a
   - Challenges focus on simulations, sliding windows, and implementation variants (e.g., queue via stacks, ring buffer).
 
 Each topic includes tests that validate correctness and check asymptotic behavior; read problem hints before implementing solutions.
+
+- Hash Tables — `src/data-structures/hash-table.js`
+  - Core ideas: key→value storage, hashing, collision handling (chaining/probing)
+  - Typical costs: average O(1) lookup/insert/delete, worst-case O(n) with poor hashing
+  - Challenges focus on frequency maps, complements (Two Sum), prefix-sum + hashmap patterns, and top-k frequency problems.
 
 ## 🚀 How to Use This Repository
 
