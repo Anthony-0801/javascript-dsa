@@ -58,6 +58,32 @@ function deepEqual(actual, expected) {
   }
 }
 
+function measureTime(fn, input, ...args) {
+  const start = performance.now();
+  const res = fn(input, ...args);
+  const end = performance.now();
+  return { result: res, time: end - start };
+}
+
+function asymptoticCheckTime({ callFn, makeInput, ns = [2000, 4000, 8000], expected = 'linear' }) {
+  const times = [];
+  for (const n of ns) {
+    const input = makeInput(n);
+    const start = performance.now();
+    callFn(input);
+    times.push(performance.now() - start);
+  }
+  const r1 = times[1] / Math.max(1, times[0]);
+  const r2 = times[2] / Math.max(1, times[1]);
+  if (expected === 'linear') {
+    if (!(r1 > 1.2 && r1 < 3.2 && r2 > 1.2 && r2 < 3.2)) {
+      throw new Error(`❌ FAILED ASYMPTOTIC TIME CHECK: ratios ${r1.toFixed(2)}, ${r2.toFixed(2)} (times: ${times.map(t=>t.toFixed(2)).join(',')})`);
+    }
+  }
+  return true;
+}
+
+
 // helpers to build and convert lists
 function buildList(arr) {
   if (!arr || arr.length === 0) return null;
@@ -100,6 +126,18 @@ t1.test('remove head when n equals length', () => {
   deepEqual(listToArray(res), []);
 });
 
+t1.test('Time complexity - removeNthFromEnd ~O(n)', () => {
+  const n = 80000;
+  const arr = Array.from({ length: n }, (_, i) => i);
+  const head = buildList(arr);
+  const { time } = measureTime(removeNthFromEnd, head, 10);
+  assert(time < 1200, `removeNthFromEnd should run under 1200ms for ${n} nodes, took ${time.toFixed(2)}ms`);
+});
+
+t1.test('Asymptotic: removeNthFromEnd ~O(n)', () => {
+  asymptoticCheckTime({ makeInput: n => buildList(Array.from({ length: n }, (_, i) => i)), callFn: h => removeNthFromEnd(h, 5) });
+});
+
 // 2. delete all occurrences
 const t2 = new TestRunner('02-delete-all-occurrences');
 t2.test('remove all 2s', () => {
@@ -112,6 +150,17 @@ t2.test('no occurrences', () => {
   const head = buildList([1, 3, 4]);
   const res = deleteAllOccurrences(head, 2);
   deepEqual(listToArray(res), [1, 3, 4]);
+});
+
+t2.test('Time complexity - deleteAllOccurrences ~O(n)', () => {
+  const n = 100000;
+  const head = buildList(Array.from({ length: n }, () => 1));
+  const { time } = measureTime(deleteAllOccurrences, head, 1);
+  assert(time < 2000, `deleteAllOccurrences should run under 2000ms for ${n} nodes, took ${time.toFixed(2)}ms`);
+});
+
+t2.test('Asymptotic: deleteAllOccurrences ~O(n)', () => {
+  asymptoticCheckTime({ makeInput: n => buildList(Array.from({ length: n }, () => 1)), callFn: h => deleteAllOccurrences(h, 1) });
 });
 
 // 3. delete node without head
@@ -129,6 +178,13 @@ t3.test('cannot delete tail', () => {
   const tail = head.next.next;
   const ok = deleteNodeWithoutHead(tail);
   assert(!ok, 'should not delete tail');
+});
+
+t3.test('Time complexity - deleteNodeWithoutHead ~O(1) typical', () => {
+  const head = buildList([1,2,3,4,5]);
+  const node = head.next; // middle node
+  const { time } = measureTime(deleteNodeWithoutHead, node);
+  assert(time < 50, `deleteNodeWithoutHead should be constant-time-ish, took ${time.toFixed(2)}ms`);
 });
 
 // 4. doubly linked list
@@ -149,12 +205,35 @@ t4.test('insert and remove', () => {
   deepEqual(listToArray(dll.head), [0, 1, 3, 4]);
 });
 
+t4.test('Doubly list operations should be fast for many nodes', () => {
+  const n = 50000;
+  const arr = Array.from({ length: n }, (_, i) => i);
+  const dll = createDoublyListFromArray(arr);
+  const start = performance.now();
+  dll.insertAtHead(-1);
+  dll.insertAtTail(n+1);
+  dll.remove(dll.head.next.next);
+  const end = performance.now();
+  assert(end - start < 1000, `Doubly list ops took too long: ${(end - start).toFixed(2)}ms`);
+});
+
 // 5. reverse linked list
 const t5 = new TestRunner('05-reverse-linked-list');
 t5.test('reverse', () => {
   const head = buildList([1, 2, 3, 4]);
   const rev = reverseLinkedList(head);
   deepEqual(listToArray(rev), [4, 3, 2, 1]);
+});
+
+t5.test('Time complexity - reverseLinkedList ~O(n)', () => {
+  const n = 100000;
+  const head = buildList(Array.from({ length: n }, (_, i) => i));
+  const { time } = measureTime(reverseLinkedList, head);
+  assert(time < 1500, `reverseLinkedList should run under 1500ms for ${n} nodes, took ${time.toFixed(2)}ms`);
+});
+
+t5.test('Asymptotic: reverseLinkedList ~O(n)', () => {
+  asymptoticCheckTime({ makeInput: n => buildList(Array.from({ length: n }, (_, i) => i)), callFn: h => reverseLinkedList(h) });
 });
 
 // 6. detect cycle
@@ -182,6 +261,19 @@ t7.test('merge', () => {
   deepEqual(listToArray(m), [1, 2, 3, 4, 5, 6]);
 });
 
+t7.test('Time complexity - mergeTwoLists ~O(n+m)', () => {
+  const aArr = Array.from({ length: 40000 }, (_, i) => i * 2 + 1);
+  const bArr = Array.from({ length: 40000 }, (_, i) => i * 2 + 2);
+  const a = buildList(aArr);
+  const b = buildList(bArr);
+  const { time } = measureTime(mergeTwoLists, a, b);
+  assert(time < 1200, `mergeTwoLists should be linear-ish, took ${time.toFixed(2)}ms`);
+});
+
+t7.test('Asymptotic: mergeTwoLists ~O(n+m)', () => {
+  asymptoticCheckTime({ makeInput: n => [buildList(Array.from({ length: n }, (_, i) => i)), buildList(Array.from({ length: n }, (_, i) => i))], callFn: lists => mergeTwoLists(lists[0], lists[1]) });
+});
+
 // 8. remove duplicates (sorted)
 const t8 = new TestRunner('08-remove-duplicates-sorted');
 t8.test('remove duplicates', () => {
@@ -190,12 +282,34 @@ t8.test('remove duplicates', () => {
   deepEqual(listToArray(res), [1, 2, 3]);
 });
 
+t8.test('Time complexity - deleteDuplicates ~O(n)', () => {
+  const n = 100000;
+  const head = buildList(Array.from({ length: n }, (_, i) => Math.floor(i/2)));
+  const { time } = measureTime(deleteDuplicates, head);
+  assert(time < 1500, `deleteDuplicates should be linear, took ${time.toFixed(2)}ms`);
+});
+
+t8.test('Asymptotic: deleteDuplicates ~O(n)', () => {
+  asymptoticCheckTime({ makeInput: n => buildList(Array.from({ length: n }, (_, i) => Math.floor(i/2))), callFn: h => deleteDuplicates(h) });
+});
+
 // 9. middle node
 const t9 = new TestRunner('09-find-middle-node');
 t9.test('odd length', () => {
   const head = buildList([1, 2, 3, 4, 5]);
   const mid = middleNode(head);
   deepEqual(listToArray(mid), [3, 4, 5]);
+});
+
+t9.test('Time complexity - middleNode ~O(n)', () => {
+  const n = 120000;
+  const head = buildList(Array.from({ length: n }, (_, i) => i));
+  const { time } = measureTime(middleNode, head);
+  assert(time < 1200, `middleNode should be linear, took ${time.toFixed(2)}ms`);
+});
+
+t9.test('Asymptotic: middleNode ~O(n)', () => {
+  asymptoticCheckTime({ makeInput: n => buildList(Array.from({ length: n }, (_, i) => i)), callFn: h => middleNode(h) });
 });
 
 t9.test('even length returns second middle', () => {
@@ -214,6 +328,18 @@ t10.test('palindrome true', () => {
 t10.test('palindrome false', () => {
   const head = buildList([1, 2, 3, 4]);
   assert(!isPalindrome(head), 'should not be palindrome');
+});
+
+t10.test('Time complexity - isPalindrome ~O(n)', () => {
+  const n = 100000;
+  const arr = Array.from({ length: n }, (_, i) => (i < n/2 ? i : n - i));
+  const head = buildList(arr);
+  const { time } = measureTime(isPalindrome, head);
+  assert(time < 2000, `isPalindrome should be linear, took ${time.toFixed(2)}ms`);
+});
+
+t10.test('Asymptotic: isPalindrome ~O(n)', () => {
+  asymptoticCheckTime({ makeInput: n => buildList(Array.from({ length: n }, (_, i) => (i < n/2 ? i : n - i))), callFn: h => isPalindrome(h) });
 });
 
 // Exported runners: allow running individual linked-list challenge suites
