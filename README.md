@@ -83,12 +83,12 @@ This repository groups learning material, exercises, and tests by topic. Below a
   - Typical costs: O(1) enqueue/dequeue when implemented correctly (avoid repeated `shift`).
   - Challenges focus on simulations, sliding windows, and implementation variants (e.g., queue via stacks, ring buffer).
 
-Each topic includes tests that validate correctness and check asymptotic behavior; read problem hints before implementing solutions.
-
 - Hash Tables — `src/data-structures/hash-table.js`
   - Core ideas: key→value storage, hashing, collision handling (chaining/probing)
   - Typical costs: average O(1) lookup/insert/delete, worst-case O(n) with poor hashing
   - Challenges focus on frequency maps, complements (Two Sum), prefix-sum + hashmap patterns, and top-k frequency problems.
+
+  Each topic includes tests that validate correctness and check asymptotic behavior; read problem hints before implementing solutions.
 
 ## 🚀 How to Use This Repository
 
@@ -368,12 +368,12 @@ for (let i = 0; i < arr.length; i++) {
 This repository is designed to be expandable:
 
 ```
-Phase 1 (Current): Arrays ✓
-Phase 2 (Coming): Hash Tables / Hash Maps
-Phase 3 (Coming): Linked Lists
-Phase 4 (Coming): Stacks & Queues
-Phase 5 (Coming): Trees & Graphs
-Phase 6 (Coming): Advanced Algorithms
+- Phase 1: Arrays ✓
+- Phase 2: Hash Tables ✓
+- Phase 3: Linked Lists ✓
+- Phase 4: Queues ✓
+- Phase 5 (Coming): Trees & Graphs
+- Phase 6 (Coming): Advanced Algorithms
 ```
 
 Each phase will follow the same structure:
@@ -424,4 +424,4 @@ Anthony AC
 
 Remember: The goal is not just to solve problems, but to understand the algorithms and trade-offs behind them. Take your time, read the hints, and master each concept before moving on.
 
-**Last Updated:** March 7, 2026
+**Last Updated:** March 13, 2026
