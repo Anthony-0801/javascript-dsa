@@ -303,26 +303,43 @@ ngeTests.test('All decreasing', () => {
 });
 
 // ============================================================================
-// RUN ALL TESTS
+// RUNNER EXPORTS
 // ============================================================================
 
-const suites = [
-  validParensTests,
-  removeAdjTests,
-  backspaceTests,
-  rpnTests,
-  implStackTests,
-  svqTests,
-  minStackTests,
-  sortStackTests,
-  infixTests,
-  ngeTests,
-];
+export function runValidParensTests() { return validParensTests.run(); }
+export function runRemoveAdjacentDuplicatesTests() { return removeAdjTests.run(); }
+export function runBackspaceCompareTests() { return backspaceTests.run(); }
+export function runEvalRPNTests() { return rpnTests.run(); }
+export function runImplementStackTests() { return implStackTests.run(); }
+export function runStackVsQueueTests() { return svqTests.run(); }
+export function runMinStackTests() { return minStackTests.run(); }
+export function runSortStackTests() { return sortStackTests.run(); }
+export function runInfixToPostfixTests() { return infixTests.run(); }
+export function runNextGreaterElementTests() { return ngeTests.run(); }
 
-let allPassed = true;
-for (const s of suites) {
-  const ok = s.run();
-  allPassed = allPassed && ok;
+export function runAllStackTests() {
+  const suites = [
+    validParensTests,
+    removeAdjTests,
+    backspaceTests,
+    rpnTests,
+    implStackTests,
+    svqTests,
+    minStackTests,
+    sortStackTests,
+    infixTests,
+    ngeTests,
+  ];
+  let allPassed = true;
+  for (const s of suites) {
+    const ok = s.run();
+    allPassed = allPassed && ok;
+  }
+  if (!allPassed) process.exit(1);
+  return allPassed;
 }
 
-if (!allPassed) process.exit(1);
+// When executed directly (node tests/stack.test.js), run all tests
+if (process.argv[1] && process.argv[1].endsWith('tests\\stack.test.js')) {
+  runAllStackTests();
+}

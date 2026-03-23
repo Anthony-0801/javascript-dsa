@@ -13,6 +13,7 @@
     "test:linked-list": "node -e \"import { runAllLinkedListTests } from './tests/linked-list.test.js'; runAllLinkedListTests();\"",
     "test:queue": "node -e \"import { runAllQueueTests } from './tests/queue.test.js'; runAllQueueTests();\"",
     "test:hash-table": "node -e \"import { runAllHashTableTests } from './tests/hash-table.test.js'; runAllHashTableTests();\"",
+    "test:stack": "node -e \"import { runAllStackTests } from './tests/stack.test.js'; runAllStackTests();\"",
 
 
     "test:array-1": "node -e \"import { runFindMaxTests } from './tests/array.test.js'; runFindMaxTests();\"",
@@ -57,6 +58,17 @@
     "test:hash-table-7": "node -e \"import { runHashTableTest7 } from './tests/hash-table.test.js'; runHashTableTest7();\"",
     "test:hash-table-8": "node -e \"import { runHashTableTest8 } from './tests/hash-table.test.js'; runHashTableTest8();\"",
     "test:hash-table-9": "node -e \"import { runHashTableTest9 } from './tests/hash-table.test.js'; runHashTableTest9();\"",
-    "test:hash-table-10": "node -e \"import { runHashTableTest10 } from './tests/hash-table.test.js'; runHashTableTest10();\""
+    "test:hash-table-10": "node -e \"import { runHashTableTest10 } from './tests/hash-table.test.js'; runHashTableTest10();\"",
+
+    "test:stack-1": "node -e \"import { runValidParensTests } from './tests/stack.test.js'; runValidParensTests();\"",
+    "test:stack-2": "node -e \"import { runRemoveAdjacentDuplicatesTests } from './tests/stack.test.js'; runRemoveAdjacentDuplicatesTests();\"",
+    "test:stack-3": "node -e \"import { runBackspaceCompareTests } from './tests/stack.test.js'; runBackspaceCompareTests();\"",
+    "test:stack-4": "node -e \"import { runEvalRPNTests } from './tests/stack.test.js'; runEvalRPNTests();\"",
+    "test:stack-5": "node -e \"import { runImplementStackTests } from './tests/stack.test.js'; runImplementStackTests();\"",
+    "test:stack-6": "node -e \"import { runStackVsQueueTests } from './tests/stack.test.js'; runStackVsQueueTests();\"",
+    "test:stack-7": "node -e \"import { runMinStackTests } from './tests/stack.test.js'; runMinStackTests();\"",
+    "test:stack-8": "node -e \"import { runSortStackTests } from './tests/stack.test.js'; runSortStackTests();\"",
+    "test:stack-9": "node -e \"import { runInfixToPostfixTests } from './tests/stack.test.js'; runInfixToPostfixTests();\"",
+    "test:stack-10": "node -e \"import { runNextGreaterElementTests } from './tests/stack.test.js'; runNextGreaterElementTests();\""
   }
 }
