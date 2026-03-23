@@ -40,7 +40,7 @@ javascript-dsa/
 │       ├── hash-table.js             # Hash table concepts & operations
 │       ├── linked-list.js            # Linked list concepts & operations
 │       ├── queue.js                  # Queue concepts & operations
-│       ├── stack.js                  # (Placeholder for future)
+│       ├── stack.js                  # Stack concepts, operations, and examples
 │       └── tree.js                   # (Placeholder for future)
 │
 ├── challenges/                       # Problem-solving challenges
@@ -52,16 +52,24 @@ javascript-dsa/
 │       ├── 0X-challenge-name.js       # Level: Description
 |   └── hash-table-challenges/
 │       ├── 0X-challenge-name.js       # Level: Description
+|   └── stack-challenges/
+│       ├── 0X-challenge-name.js       # Level: Description
 │   
 │
 ├── tests/                            # Automated test suites
 │   ├── array.test.js                 # Tests for all array challenges
 │   └── linked-list.test.js           # Tests for linked-list challenges
+│   └── queue.test.js                 # Tests for queue challenges
+│   └── hash-table.test.js            # Tests for hash table challenges
+│   └── stack.test.js                 # Tests for stack challenges
 │
-└── docs/                             # Documentation & references
+└── docs/                               # Documentation & references
     ├── reference-links.md              # General DSA resources & links
     └── array-reference-links.md        # Array-specific references
     └── linked-list-reference-links.md  # Linked-list specific references
+    └── queue-reference-links.md        # Queue specific references
+    └── hash-table-reference-links.md   # Hash table specific references
+    └── stack-reference-links.md        # Stack specific references
 ```
 
 ## 📚 Content Breakdown
@@ -87,6 +95,11 @@ This repository groups learning material, exercises, and tests by topic. Below a
   - Core ideas: key→value storage, hashing, collision handling (chaining/probing)
   - Typical costs: average O(1) lookup/insert/delete, worst-case O(n) with poor hashing
   - Challenges focus on frequency maps, complements (Two Sum), prefix-sum + hashmap patterns, and top-k frequency problems.
+
+- Stacks — `src/data-structures/stack.js`
+  - Core ideas: Last-In-First-Out (LIFO), push/pop, peek/top, auxiliary stacks for extra info
+  - Typical costs: O(1) push/pop/peek (amortized for dynamic arrays)
+  - Challenges focus on parentheses validation, expression evaluation (RPN), min-stack design, monotonic stacks (next greater), and conversion algorithms (infix→postfix)
 
   Each topic includes tests that validate correctness and check asymptotic behavior; read problem hints before implementing solutions.
 
@@ -424,4 +437,4 @@ Anthony AC
 
 Remember: The goal is not just to solve problems, but to understand the algorithms and trade-offs behind them. Take your time, read the hints, and master each concept before moving on.
 
-**Last Updated:** March 13, 2026
+**Last Updated:** March 23, 2026
